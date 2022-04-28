@@ -34,3 +34,14 @@ python train.py
 ```bash
 python train_contrast.py
 ```
+
+## Notes and Analysis
+
+1. As seen after the training, the model does not show any increase in the cumulative reward.
+2. Upon further probing we notice that the successor features are very similar irrespective of state.
+3. This can be attributed to the objective function which only pushes the probabilities of the states and actions on the trajectory but does not make the successors far apart for far apart states.
+4. Thus, the model converges to giving very close values of the successors, irrespective of the state giving innaccurate successors.
+5. We proposed the use of contrastive learning by giving negative samples and forcing the successors to be far apart for the same.
+6. We were unable to verify this approach as despite initial contrastive learning seemed to increase the distance for far apart successors slightly but we did not have enough memory to store more negative samples for the same.
+
+
