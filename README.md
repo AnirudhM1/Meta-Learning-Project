@@ -35,6 +35,26 @@ python train.py
 python train_contrast.py
 ```
 
+## Training details
+
+In each epoch, the training is split into 2 parts:
+
+1. First we train the Successor Feature (SF) in an unsupervised manner. We do so by optimizing the objective function given in the paper over a fixed set of walks.
+2. We then freeze the training of the SF and train a vector of weights to obtain the Action-Value (Q-value) function for a particular task distribution. This part of the training is done using fitted Q-learning. <br />This updated Q value is then used to generate new walks for the the training of the SF in the next epoch.
+
+## Model details
+
+ To train the SF, we have used 2 differnt models for the Grid World environment and Market RL environment. This is done because the SF is a function of the environment state and action in the case of Grid World. For Market RL, it is a function of only the state. This is because any action taken by the agent cannot influence the next state of the market.
+ 
+ 1. **Grid World:**
+      The model used is a CNN. It takes in the state as input and outputs the successor Feature representation for each of the 4 possible actions.
+      > Since SF is dependant of the action taken, we return 4 differnt vectors representing the SF for each action taken in the particular state.
+      <br />
+ 2. **Market RL**:
+       The model used here is an RNN. To ensure that the process is Markov, the state after each action is the concatenation of every state in it's history. Since the shape of the state vector is variable and time dependant, we pass it through LSTM layers and then return the output as a single vector containg the SF for a particular state.
+       > Since SF is independent of the action taken in this case, we just return a single vector for each state.
+
+
 ## Notes and Analysis
 
 1. As seen after the training, the model does not show any increase in the cumulative reward.
